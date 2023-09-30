@@ -1,0 +1,131 @@
+/* Container for the entire blog content */
+.blog-container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a container shadow */
+    width: 80%; /* Adjust the width as needed */
+    position: relative; /* Position for the 3D effect */
+    transform-style: preserve-3d; /* Preserve 3D transformations */
+    margin: 20px auto; /* Center the container */
+    max-width: 800px; /* Limit the maximum width */
+    text-align: center; /* Center-align the content within the container */
+}
+
+/* Style for the blog title */
+.blog-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Style for author information and created date */
+.blog-header .author-info, .blog-header .created-date {
+    font-style: italic;
+    color: #888;
+}
+
+/* Style for the blog image */
+.blog-header .blog-image {
+    max-width: 100%; /* Adjust the maximum width of the image */
+    max-height: 300px; /* Adjust the maximum height of the image */
+    display: block; /* Ensure the image is centered horizontally */
+    margin: 0 auto; /* Center the image horizontally */
+    margin-bottom: 20px; /* Add some spacing below the image */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4); /* Add a shadow to the image */
+}
+
+/* Style for blog content */
+.blog-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* Style for comments section */
+.comments-list {
+    list-style: none;
+    padding: 0;
+}
+
+.comment {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    position: relative; /* Position for the 3D effect */
+    transform-style: preserve-3d; /* Preserve 3D transformations */
+    transition: transform 0.3s ease; /* Add a transition effect for the 3D transform */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a box shadow */
+}
+
+/* Hover effect for comments */
+.comment:hover {
+    transform: translateZ(10px); /* Increase the 3D effect on hover */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4); /* Add a deeper shadow on hover */
+}
+
+/* Style for comment text */
+.comment p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Style for comment author and like button */
+.comment .author-info {
+    font-style: italic;
+    color: #888;
+}
+
+.like-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    transition: background-color 0.3s ease; /* Add a hover effect for the button */
+}
+
+/* Button hover effect */
+.like-button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for the add comment form */
+#add-comment-form {
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; /* Allow vertical resizing of the textarea */
+    min-height: 100px; /* Set a minimum height for the textarea */
+}
+
+.add-comment-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Share blog link */
+.share-blog-link {
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+}

@@ -1,0 +1,19 @@
+
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/email_send.css' %}">
+</head>
+<body>
+    <div class="email-container">
+        <h1>Thank You</h1>
+        <p>Hello {{ user }},</p>
+        <p>Thank you for using our services to Reset Your Password.</p>
+        <p>We have send the reset password link into your given email address,please click on that link to reset your password </p>
+        <p><a href="{% url 'index' %}">&nbsp; &nbsp; Click Here</a>To go back to main page</p>
+    </div>
+</body>
+</html>

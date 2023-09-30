@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>{{ blog.title }}</title>
+    
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog_detail.css' %}">
+</head>
+<body>
+    <div class="blog-container">
+        <div class="blog-header">
+            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="blog-image">
+            <h1>{{ blog.title }}</h1>
+            <p class="author-info">Author: {{ blog.author.username }}</p>
+            <p class="created-date">Created At: {{ blog.created_at }}</p>
+        </div>
+        <div class="blog-content">
+            <p>{{ blog.content }}</p>
+        </div>
+
+        <h2>Comments</h2>
+        <ul class="comments-list">
+            {% for comment in comments %}
+            <li class="comment">
+                <p>{{ comment.text }}</p>
+                <p class="author-info">By: {{ comment.author.username }}</p>
+                <button class="like-button" data-comment-id="{{ comment.id }}">Like</button>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Add Comment Form -->
+        <form id="add-comment-form">
+            {% csrf_token %}
+            <textarea name="text" placeholder="Add a comment"></textarea>
+            <button type="submit" class="add-comment-button">Add Comment</button>
+        </form>
+
+        <!-- Share Blog Button -->
+        <a href="{% url 'share_blog' blog.id %}" class="share-blog-link">Share this blog</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Define an object to store the like counts and states of comments
+        var commentLikes = {};
+
+        // Like Comment Button Click Event
+        $(document).on("click", ".like-button", function () {
+            var commentId = $(this).data("comment-id");
+            var likeButton = $(this);
+            var csrfToken = getCookie("csrftoken");
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'like_comment' 0 %}".replace('0', commentId),
+                headers: { "X-CSRFToken": csrfToken },
+                success: function (data) {
+                    console.log("AJAX Request Sent");
+                    console.log(data);
+                    if (data.message) {
+                        alert(data.message);
+
+                        // Update the like count and button appearance based on the response
+                        if (data.message === 'Comment liked successfully!') {
+                            // Increase the like count
+                            if (commentLikes[commentId]) {
+                                commentLikes[commentId]++;
+                            } else {
+                                commentLikes[commentId] = 1;
+                            }
+                            // Update button text and class
+                            likeButton.addClass("liked");
+                            likeButton.text("Liked (" + commentLikes[commentId] + ")");
+                        } else if (data.message === 'Like removed successfully!') {
+                            // Decrease the like count
+                            if (commentLikes[commentId]) {
+                                commentLikes[commentId]--;
+                            }
+                            // Update button text and class
+                            likeButton.removeClass("liked");
+                            if (commentLikes[commentId] > 0) {
+                                likeButton.text("Like (" + commentLikes[commentId] + ")");
+                            } else {
+                                likeButton.text("Like");
+                            }
+                        }
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+
+        // Add Comment Form Submission
+        $("#add-comment-form").on("submit", function (e) {
+            e.preventDefault();
+            var text = $(this).find("textarea").val();
+            var csrfToken = getCookie("csrftoken");
+
+            $.ajax({
+                url: "{% url 'add_comment' blog.id %}",
+                type: "POST",
+                data: { text: text },
+                headers: { "X-CSRFToken": csrfToken },
+                dataType: "json",
+                success: function (data) {
+                    if (data.message) {
+                        // Create a new comment element and append it to the comments list
+                        var commentId = data.comment_id;
+                        commentLikes[commentId] = 0; // Initialize the like count for this comment
+                        var newComment = '<li><p>' + text + '</p><p>By: ' + data.author + '</p><button class="like-button" data-comment-id="' + commentId + '">Like</button></li>';
+                        $(".comments-list").append(newComment);
+
+                        // Clear the comment input field
+                        $("#add-comment-form textarea").val("");
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+
+        // Function to get the CSRF token from the cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
